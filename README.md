@@ -8,8 +8,8 @@ Website to document two Candians Roaming through Europe while living in Rome
 
 ### Polymer News
 
-Build off of Polymer News Templatehttps://github.com/polymer/news.git
+Build off of Polymer News Template (https://github.com/polymer/news.git)
 
 ### Baqend
 
-Using Baqend for data (Eventually)
+Using Baqend  (https://www.baqend.com/) for data (Eventually)
