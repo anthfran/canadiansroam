@@ -1,42 +1,15 @@
-# NEWS
+# Canadians Roam
 
-## Prerequisites
+## About
 
-### Polymer CLI
+Website to document two Candians Roaming through Europe while living in Rome
 
-Install [polymer-cli](https://github.com/Polymer/polymer-cli):
-(Need at least npm v0.3.0)
+## Technology
 
-    npm install -g polymer-cli
+### Polymer News
 
-### Google App Engine SDK
+Build off of Polymer News Templatehttps://github.com/polymer/news.git
 
-Install [Google App Engine SDK](https://cloud.google.com/appengine/downloads)
+### Baqend
 
-## Setup
-
-    git clone https://github.com/polymer/news.git
-    cd news
-    bower install
-
-## Start the development server
-
-    dev_appserver.py .
-
-## Build
-
-    polymer build
-
-## Test the build
-
-This command serves the minified version of the app in an unbundled state, as it would be served by a push-compatible server:
-
-    dev_appserver.py build/unbundled
-
-This command serves the minified version of the app generated using fragment bundling:
-
-    dev_appserver.py build/bundled
-
-## Deploy to Google App Engine
-
-    gcloud app deploy build/bundled/app.yaml --project [YOUR_PROJECT_ID]
+Using Baqend for data (Eventually)
