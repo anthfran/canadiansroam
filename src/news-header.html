@@ -52,21 +52,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         /* required for IE 11, so this <a> can receive pointer events */
         display: inline-block;
         pointer-events: auto;
-        color: inherit;
+        color: #CE2B37;
       }
 
       .menu-list {
         display: block;
         text-align: center;
-        font-size: 13px;
+        font-size: 16px;
         border-top: var(--app-border-style);
         border-bottom: var(--app-border-style);
         padding: 8px 0;
-        margin: 32px 0;
+        margin: 10px 0;
       }
 
       .menu-list a {
-        color: inherit;
+        color: #CE2B37;
         text-decoration: none;
         margin: 0 10px;
         letter-spacing: 0.08em;
@@ -115,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .sticky-nav-menu a {
         display: block;
         line-height: 32px;
-        font-size: 15px;
+        font-size: 16px;
         text-decoration: none;
         color: var(--app-nav-deselected-text-color);
       }
@@ -174,8 +174,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         .logo-toolbar {
-          margin-top: 40px;
-          height: 45px;
+          margin-top: 10px;
+          height: 40px;
         }
 
         .mobile-toggle-drawer-btn {
@@ -255,9 +255,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
         </div>
       </app-toolbar>
-      <div class="date-line" role="heading">
-        [[category.title]] <span aria-hidden="true">&nbsp;&middot;&nbsp;</span> [[_currentTime()]]
-      </div>
       <template is="dom-if" if="[[!smallScreen]]">
         <iron-selector role="navigation" class="menu-list" selected="[[category.name]]"
             attr-for-selected="name">

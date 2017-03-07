@@ -17,8 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   (function() {
 
     var categoryList = [
-      {name: 'latest_stories', title: 'Latest Stories'},
-      {name: 'life_in_rome', title: 'Life in Rome'},
+      {name: 'latest', title: 'Latest Stories'},
+      {name: 'life-in-rome', title: 'Life in Rome'},
       {name: 'travels', title: 'Travels'},
       {name: 'canadians', title: 'Advice for Canadians'},
       {name: 'about', title: 'About Us'},
@@ -117,29 +117,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._setFailure(false);
           return;
         }
-        this._fetch('/data/' + category.name + '.json',
+        //this._fetch('/data/' + category.name + '.json',
+        this._fetch('/data/articles.json',
           function(response) {
-            this.set('category.items', this._parseCategoryItems(response));
+            this.set('category.items', this._parseCategoryItems(response, category.name));
           }.bind(this),
           attempts || 1 /* attempts */);
       },
 
-      _parseCategoryItems: function(response) {
+      _parseCategoryItems: function(response, currentCategory) {
         var items = [];
 
         for (var i = 0, item; item = response[i]; ++i) {
-          items.push({
-            headline: this._unescapeText(item.title),
-            href: this._getItemHref(item),
-            id: item.id,
-            imageUrl: this._getItemImage(item),
-            placeholder: item.placeholder,
-            category: item.category,
-            timeAgo: this._timeAgo(new Date(item.time).getTime()),
-            author: item.author,
-            summary: this._trimRight(item.summary, 100),
-            readTime: Math.max(2, Math.round(item.contentLength / 3000)) + ' min read'
-          });
+          if (currentCategory == 'latest' || currentCategory == item.link) {
+            items.push({
+              headline: this._unescapeText(item.title),
+              href: this._getItemHref(item),
+              id: item.id,
+              imageUrl: this._getItemImage(item),
+              placeholder: item.placeholder,
+              category: item.category,
+              link: item.link,
+              timeAgo: this._timeAgo(new Date(item.time).getTime()),
+              author: item.author,
+              summary: this._trimRight(item.summary, 100),
+              readTime: Math.max(2, Math.round(item.contentLength / 3000)) + ' min read'
+            });
+          }
         }
 
         return items;
@@ -151,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _getItemHref: function(item) {
-        return item.id ? '/article/' + this.categoryName + '/' + encodeURIComponent(item.id) : null;
+        return item.id ? '/article/' + item.link + '/' + encodeURIComponent(item.id) : null;
       },
 
       _getItemImage: function(item) {

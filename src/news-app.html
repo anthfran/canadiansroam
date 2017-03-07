@@ -55,24 +55,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 0 auto;
       }
 
-      footer {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        padding-bottom: 24px;
-        text-align: center;
-      }
-
-      footer a {
-        text-decoration: none;
-        font-size: 13px;
-        color: #757575;
-      }
-
-      footer a:hover {
-        text-decoration: underline;
-      }
 
       /* desktop */
       @media (min-width: 768px) {
@@ -145,10 +127,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <news-path-warning name="path-warning"></news-path-warning>
 
     </iron-pages>
-
-    <footer>
-      <a href="https://www.polymer-project.org/1.0/toolbox/">Made with Polymer</a>
-    </footer>
 
   </template>
 
@@ -238,7 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged: function(page) {
         if (!page) {
           // set default route if route path is empty
-          this.set('route.path', 'list/latest_stories');
+          this.set('route.path', 'list/latest');
           return;
         }
         this.page = page;

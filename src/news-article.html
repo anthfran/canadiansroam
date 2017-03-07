@@ -139,7 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       /* mobile and desktop small */
-      @media (max-width: 1309px) {
+      @media (max-width: 2400px) {
         h1 {
           font-size: 6vh;
           line-height: 7vh;
@@ -181,11 +181,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <a href="#" class="share-link" aria-label="Share on social networks">
           <iron-icon icon="share"></iron-icon> Share
         </a>
-        <news-side-list class="fade-in" items="[[_slice(category.items, 0, 3)]]">
-          Most Read
-        </news-side-list>
-        <news-side-list class="fade-in" featured items="[[_slice(category.items, 3, 9)]]">
-          Top Stories
+        <news-side-list class="fade-in" items="[[_slice(category.items, 0, 6)]]">
+          Latest Stories
         </news-side-list>
       </aside>
     </div>

@@ -2,3 +2,8 @@ bower_components/
 build/
 *.pyc
 .remote-sync.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

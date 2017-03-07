@@ -122,7 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       /* desktop large */
-      @media (min-width: 1310px) {
+      @media (min-width: 2400px) {
         .container {
           @apply(--layout-horizontal);
         }
@@ -152,6 +152,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <news-list-featured-item item="[[_getFeaturedItem(category.items)]]">
         </news-list-featured-item>
 
+        <h3></h3>
         <ul class="app-grid article-grid fade-in">
           <template is="dom-repeat" items="[[_slice(category.items, 1, 5)]]">
             <li>
@@ -160,27 +161,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template>
         </ul>
 
-        <h3>Opinions</h3>
-        <ul class="opinions-grid fade-in">
+        <aside>
+          <div class="ad-container">
+            <news-iframe src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=12&l=ur1&f=ifr"></news-iframe>
+          </div>
+        </aside>
+
+        <ul class="app-grid article-grid fade-in">
           <template is="dom-repeat" items="[[_slice(category.items, 5)]]">
             <li>
-              <news-list-item horizontal item="[[item]]"></news-list-item>
+              <news-list-item item="[[item]]"></news-list-item>
             </li>
           </template>
         </ul>
       </div>
 
-      <aside>
-        <div class="ad-container">
-          <news-iframe src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=12&l=ur1&f=ifr"></news-iframe>
-        </div>
-        <news-side-list class="fade-in" items="[[_slice(category.items, 0, 3)]]">
-          Most Read
-        </news-side-list>
-        <news-side-list class="fade-in" featured items="[[_slice(category.items, 3, 9)]]">
-          More Top Stories
-        </news-side-list>
-      </aside>
     </div>
 
     <news-network-warning
