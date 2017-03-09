@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         position: relative;
         min-height: 100vh;
-        padding-bottom: 64px;
+        padding-bottom: 0px;
 
         --app-border-style: 1px solid #CCC;
         --app-transparent-border-style: 1px solid rgba(255, 255, 255, 0.5);
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /* desktop */
       @media (min-width: 768px) {
         :host {
-          margin: 0 40px;
+          margin: 0px;
         }
       }
 
@@ -127,6 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <news-path-warning name="path-warning"></news-path-warning>
 
     </iron-pages>
+    <news-footer categories="[[categories]]" category="[[category]]"></news-footer>
 
   </template>
 
