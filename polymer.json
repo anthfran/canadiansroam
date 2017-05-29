@@ -1,5 +1,5 @@
 {
-  "entrypoint": "/",
+  "entrypoint": "index.html",
   "shell": "src/news-app.html",
   "fragments": [
     "src/news-list.html",
@@ -7,17 +7,29 @@
     "src/news-path-warning.html",
     "src/lazy-resources.html"
   ],
-  "sourceGlobs": [
-   "src/**/*",
-   "images/**/*",
-   "data/**/*",
-   "app.yaml",
-   "bower.json",
-   "index.html",
-   "main.py"
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "data/**/*",
+    "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
+    "app.yaml",
+    "main.py",
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+    "bower_components/webcomponentsjs/*"
+  ],
+  "lint": {
+    "rules": ["polymer-2-hybrid"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled",
+      "basePath": true
+    },
+    {
+      "preset": "es6-unbundled",
+      "basePath": true
+    }
   ]
 }

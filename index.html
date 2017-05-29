@@ -20,7 +20,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="theme-color" content="#CE2B37">
   <link rel="manifest" href="/manifest.json">
 
-  <link rel="import" href="/src/news-app.html" async>
+  <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="/src/news-app.html">
 
   <style>
 
@@ -32,7 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       min-height: 100vh;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
-
 
     /* styling for render while resources are loading */
     news-app[unresolved] {
@@ -64,7 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 20px;
         color: #FFF; /* --app-cover-text-color */
       }
-
     }
 
   </style>
@@ -74,21 +73,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <news-app unresolved app-title="Canadians Roam">Canadians Roam</news-app>
 
-  <script>
-    Polymer = {lazyRegister: true, dom: 'shadow'};
-
-    (function() {
-      if ('registerElement' in document
-          && 'import' in document.createElement('link')
-          && 'content' in document.createElement('template')) {
-        // platform is good!
-      } else {
-        // polyfill the platform!
-        var e = document.createElement('script');
-        e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-        document.body.appendChild(e);
-      }
-    })();
-  </script>
 </body>
 </html>
