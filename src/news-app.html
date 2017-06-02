@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/helpers/helpers.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
@@ -133,175 +133,177 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
+      class NewsApp extends Polymer.Element {
 
-      is: 'news-app',
+        static get is() { return 'news-app'; }
 
-      properties: {
+        static get properties() { return {
 
-        appTitle: String,
+          appTitle: String,
 
-        page: {
-          type: String,
-          observer: '_pageChanged'
-        },
+          page: {
+            type: String,
+            observer: '_pageChanged'
+          },
 
-        categories: Array,
+          routeData: Object,
 
-        categoryName: String,
+          categories: Array,
 
-        category: Object,
+          categoryName: String,
 
-        articleId: String,
+          category: Object,
 
-        article: Object,
+          articleId: String,
 
-        articleHeadline: {
-          type: String,
-          value: ''
-        },
+          article: Object,
 
-        offline: {
-          type: Boolean,
-          value: false,
-          readOnly: true
-        },
+          articleHeadline: {
+            type: String,
+            value: ''
+          },
 
-        failure: Boolean,
+          offline: {
+            type: Boolean,
+            value: false,
+            readOnly: true
+          },
 
-        loadComplete: Boolean
+          failure: Boolean,
 
-      },
+          loadComplete: Boolean
 
-      observers: [
-        '_routePageChanged(routeData.page)',
-        '_updateArticleHeadline(article.headline)',
-        '_updateDocumentTitle(page, category.title, articleHeadline, appTitle)'
-      ],
+        }}
 
-      listeners: {
-        'refresh-data': '_refreshData'
-      },
+        static get observers() { return [
+          '_routePageChanged(routeData.page, isAttached)',
+          '_updateArticleHeadline(article.headline)',
+          '_updateDocumentTitle(page, category.title, articleHeadline, appTitle)'
+        ]}
 
-      _networkSnackbar: null,
+        ready() {
+          super.ready();
+          // Custom elements polyfill safe way to indicate an element has been upgraded.
+          this.removeAttribute('unresolved');
 
-      created: function() {
-        // Custom elements polyfill safe way to indicate an element has been upgraded.
-        this.removeAttribute('unresolved');
+          // Chrome on iOS recomputes "vh" unit when URL bar goes off screen. Since we use "vh" unit
+          // to size the cover image and the title, those items will resize in response to the URL
+          // bar being shown or hidden. FWIW, this is not an issue in Chrome 56 on Android or iOS
+          // Safari. To workaround this on Chrome on iOS, we will use a
+          // fixed viewport height in places where normally relying on "vh" unit and replace them with
+          // custom property "--viewport-height".
+          let ua = navigator.userAgent;
+          let cMatch = navigator.userAgent.match(/Android.*Chrome[\/\s](\d+\.\d+)/);
+          if (ua.match('CriOS') || (cMatch && cMatch[0] && cMatch[1] < 56)) {
+            document.body.classList.add('fixed-viewport-height');
+          }
 
-        // Chrome on iOS recomputes "vh" unit when URL bar goes off screen. Since we use "vh" unit
-        // to size the cover image and the title, those items will resize in response to the URL
-        // bar being shown or hidden. FWIW, this is not an issue in Chrome 56 on Android or iOS
-        // Safari. To workaround this on Chrome on iOS, we will use a
-        // fixed viewport height in places where normally relying on "vh" unit and replace them with
-        // custom property "--viewport-height".
-        var ua = navigator.userAgent;
-        var cMatch = navigator.userAgent.match(/Android.*Chrome[\/\s](\d+\.\d+)/);
-        if (ua.match('CriOS') || (cMatch && cMatch[0] && cMatch[1] < 56)) {
-          document.body.classList.add('fixed-viewport-height');
-        }
-      },
-
-      attached: function() {
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          this.listen(window, 'online', '_notifyNetworkStatus');
-          this.listen(window, 'offline', '_notifyNetworkStatus');
-        });
-      },
-
-      detached: function() {
-        this.unlisten(window, 'online', '_notifyNetworkStatus');
-        this.unlisten(window, 'offline', '_notifyNetworkStatus');
-      },
-
-      _routePageChanged: function(page) {
-        if (!page) {
-          // set default route if route path is empty
-          this.set('route.path', 'list/latest');
-          return;
-        }
-        this.page = page;
-        // Scroll to the top of the page on every *route* change. Use `Polymer.AppLayout.scroll`
-        // with `behavior: 'silent'` to disable header scroll effects during the scroll.
-        Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
-        // Close the drawer - in case the *route* change came from a link in the drawer.
-        this.$.nav.closeDrawer();
-      },
-
-      _pageChanged: function(page, oldPage) {
-        var href;
-
-        switch(page) {
-          case 'list':
-            href = 'news-list.html';
-          break;
-          case 'article':
-            href = 'news-article.html';
-          break;
-          default:
-            href = 'news-path-warning.html';
-          break;
-        }
-        this.importHref(
-            this.resolveUrl(href),
-            this._pageLoaded.bind(this, Boolean(oldPage)),
-            null,
-            true);
-      },
-
-      _pageLoaded: function(shouldResetLayout) {
-        this._ensureLazyLoaded();
-      },
-
-      _ensureLazyLoaded: function() {
-        // load lazy resources after render and set `loadComplete` when done.
-        if (!this.loadComplete) {
-          Polymer.RenderStatus.afterNextRender(this, function() {
-            this.importHref(this.resolveUrl('lazy-resources.html'), function() {
-              this._notifyNetworkStatus();
-              this.loadComplete = true;
-
-              // Load pre-caching Service Worker
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js');
-              }
-            });
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            window.addEventListener('online', (e)=>this._notifyNetworkStatus(e));
+            window.addEventListener('offline', (e)=>this._notifyNetworkStatus(e));
+            this.addEventListener('refresh-data', (e)=>this._refreshData(e));
           });
         }
-      },
 
-      _notifyNetworkStatus: function() {
-        var oldOffline = this.offline;
-        this._setOffline(!window.navigator.onLine);
-        // Show the snackbar if the user is offline when starting a new session
-        // or if the network status changed.
-        if (this.offline || (!this.offline && oldOffline === true)) {
-          if (!this._networkSnackbar) {
-            this._networkSnackbar = document.createElement('news-snackbar');
-            Polymer.dom(this.root).appendChild(this._networkSnackbar);
-          }
-          Polymer.dom(this._networkSnackbar).textContent = this.offline ?
-              'You are offline' : 'You are online';
-          this._networkSnackbar.open();
+        connectedCallback() {
+          super.connectedCallback();
+          this.isAttached = true;
         }
-      },
 
-      _updateArticleHeadline: function(articleHeadline) {
-        this.articleHeadline = articleHeadline;
-      },
+        _routePageChanged(page, isAttached) {
+          if (!isAttached) {
+            return;
+          }
+          if (!page) {
+            // set default route if route path is empty
+            this.set('route.path', 'list/latest');
+            return;
+          }
+          this.page = page;
+          // Scroll to the top of the page on every *route* change. Use `Polymer.AppLayout.scroll`
+          // with `behavior: 'silent'` to disable header scroll effects during the scroll.
+          Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+          // Close the drawer - in case the *route* change came from a link in the drawer.
+          this.$.nav.closeDrawer();
+        }
 
-      // Elements in the app can notify section changes.
-      // Response by a11y announcing the section and syncronizing the category.
-      _updateDocumentTitle: function(page, categoryTitle, articleHeadline, appTitle) {
-        document.title = (page === 'list' ? categoryTitle : articleHeadline) + ' - ' + appTitle;
-      },
+        _pageChanged(page, oldPage) {
+          let href;
 
-      _refreshData: function() {
-        this.$.data.refresh();
+          switch(page) {
+            case 'list':
+              href = 'news-list.html';
+            break;
+            case 'article':
+              href = 'news-article.html';
+            break;
+            default:
+              href = 'news-path-warning.html';
+            break;
+          }
+          let cb = this._pageLoaded.bind(this, Boolean(oldPage));
+          Polymer.importHref(
+              this.resolveUrl(href),
+              cb,
+              cb,
+              true);
+        }
+
+        _pageLoaded(shouldResetLayout) {
+          this._ensureLazyLoaded();
+        }
+
+        _ensureLazyLoaded() {
+          // load lazy resources after render and set `loadComplete` when done.
+          if (!this.loadComplete) {
+            Polymer.RenderStatus.afterNextRender(this, () => {
+              Polymer.importHref(this.resolveUrl('lazy-resources.html'), () => {
+                this._notifyNetworkStatus();
+                this.loadComplete = true;
+
+                // Load pre-caching Service Worker
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.register('/service-worker.js');
+                }
+              });
+            });
+          }
+        }
+
+        _notifyNetworkStatus() {
+          let oldOffline = this.offline;
+          this._setOffline(!window.navigator.onLine);
+          // Show the snackbar if the user is offline when starting a new session
+          // or if the network status changed.
+          if (this.offline || (!this.offline && oldOffline === true)) {
+            if (!this._networkSnackbar) {
+              this._networkSnackbar = document.createElement('news-snackbar');
+              this.root.appendChild(this._networkSnackbar);
+            }
+            this._networkSnackbar.textContent = this.offline ?
+                'You are offline' : 'You are online';
+            this._networkSnackbar.open();
+          }
+        }
+
+        _updateArticleHeadline(articleHeadline) {
+          this.articleHeadline = articleHeadline;
+        }
+
+        // Elements in the app can notify section changes.
+        // Response by a11y announcing the section and syncronizing the category.
+        _updateDocumentTitle(page, categoryTitle, articleHeadline, appTitle) {
+          document.title = (page === 'list' ? categoryTitle : articleHeadline) + ' - ' + appTitle;
+        }
+
+        _refreshData() {
+          this.$.data.refresh();
+        }
+
       }
 
-    });
-
-  </script>
+      customElements.define(NewsApp.is, NewsApp);
+      
+      </script>
 
 </dom-module>
