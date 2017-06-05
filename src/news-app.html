@@ -52,9 +52,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-pages {
         max-width: 1440px;
-        margin: 0 auto;
+        margin: 30px;
       }
-
+      news-footer {
+        margin: 0;
+      }
 
       /* desktop */
       @media (min-width: 768px) {
@@ -128,7 +130,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </iron-pages>
     <news-footer categories="[[categories]]" category="[[category]]"></news-footer>
-
   </template>
 
   <script>
@@ -303,7 +304,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       customElements.define(NewsApp.is, NewsApp);
-      
+
       </script>
 
 </dom-module>

@@ -8,10 +8,11 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/social-media-icons/social-media-icons.html">
 
 <dom-module id="news-header">
 
@@ -27,6 +28,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       header,
       .sticky-nav {
         z-index: 10;
+      }
+
+      .facebook {
+        color: #3B5998;
+      }
+
+      .instagram {
+        color: #3F729B;
       }
 
       .logo {
@@ -255,14 +264,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
         </div>
       </app-toolbar>
-      <template is="dom-if" if="[[!smallScreen]]">
-        <iron-selector role="navigation" class="menu-list" selected="[[category.name]]"
-            attr-for-selected="name">
-          <template is="dom-repeat" items="[[categories]]" as="category" initial-count="9">
-            <a name="[[category.name]]" href="/list/[[category.name]]">[[category.title]]</a>
-          </template>
-        </iron-selector>
-      </template>
+      <dom-if if="[[!smallScreen]]">
+        <template>
+          <iron-selector role="navigation" class="menu-list" selected="[[category.name]]"
+              attr-for-selected="name">
+            <dom-repeat items="[[categories]]" as="category" initial-count="9">
+              <template>
+                <a name="[[category.name]]" href="/list/[[category.name]]">[[category.title]]</a>
+              </template>
+            </dom-repeat>
+            <a href="https://www.facebook.com/CanadiansRoam-474269312915699/" target="_blank"><paper-icon-button icon="facebook" class="facebook"></paper-icon-button ></a>
+            <a href="https://www.instagram.com/canadiansroam/" target="_blank"><paper-icon-button icon="instagram" class="instagram"></paper-icon-button ></a>
+          </iron-selector>
+        </template>
+      </dom-if>
     </header>
 
     <!--
@@ -301,11 +316,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
+    class NewsHeader extends Polymer.Element {
 
-      is: 'news-header',
+      static get is() { return 'news-header'; }
 
-      properties: {
+      static get properties() { return {
 
         appTitle: String,
 
@@ -325,38 +340,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true
         }
 
-      },
+      }}
 
-      _menuIcon: function(drawerOpened) {
+      _menuIcon(drawerOpened) {
         return drawerOpened ? 'close' : 'menu';
-      },
+      }
 
-      _currentTime: function() {
-        var monthNames = [
+      _currentTime() {
+        let monthNames = [
           'January', 'February', 'March',
           'April', 'May', 'June', 'July',
           'August', 'September', 'October',
           'November', 'December'
         ];
 
-        var date = new Date();
+        let date = new Date();
 
         return monthNames[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
-      },
+      }
 
-      _toggleDrawer: function() {
+      _toggleDrawer() {
         this.drawerOpened = !this.drawerOpened;
-      },
+      }
 
-      _getScrollThreshold: function(smallScreen) {
+      _getScrollThreshold(smallScreen) {
         return smallScreen ? window.innerHeight - 64 : 162;
-      },
+      }
 
-      _computeAppHomeLabel: function(appTitle) {
+      _computeAppHomeLabel(appTitle) {
         return appTitle + ' Home';
       }
 
-    });
+    }
+
+    customElements.define(NewsHeader.is, NewsHeader);
 
   </script>
 
