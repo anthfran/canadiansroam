@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="news-img.html">
@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: normal;
         font-size: 37px;
         line-height: 47px;
-        margin: 24px 0;
+        margin: 12px 0;
       }
 
       .cover-text .meta {
@@ -144,8 +144,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>[[article.headline]]</h1>
       <div class="meta">
         <span>[[article.timeAgo]]</span>
-        <iron-icon class="timer-icon" icon="timer"></iron-icon>
-        <span>[[article.readTime]]</span>
       </div>
     </div>
 
@@ -158,17 +156,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
 
-    Polymer({
+    class NewsArticleCover extends Polymer.Element {
 
-      is: 'news-article-cover',
+      static get is() { return 'news-article-cover'; }
 
-      properties: {
+      static get properties() { return {
 
         article: Object
 
-      }
+      }}
 
-    });
+    }
+
+    customElements.define(NewsArticleCover.is, NewsArticleCover);
 
   </script>
 
