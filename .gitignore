@@ -3,6 +3,10 @@ build/
 *.pyc
 .remote-sync.json
 .sync/
+database.rules.json
+firebase.json
+.firebaserc
+functions/node_modules/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
