@@ -1,0 +1,123 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
+<dom-module id="place-card">
+
+  <template>
+
+  <style is="custom-style">
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%
+  }
+  .card {
+  }
+  .cafe-header {
+    @apply(--paper-font-headline);
+    font-size: 24px;
+  }
+  .cafe-light {
+    color: var(--paper-grey-600);
+  }
+  .cafe-location {
+    float: right;
+    font-size: 15px;
+    vertical-align: middle;
+  }
+  paper-icon-button.star {
+    --paper-icon-button-width: 24px;
+    --paper-icon-button-height: 24px;
+    color: var(--paper-amber-500);
+    padding-left:0px;
+    padding-right: 16px;
+  }
+  paper-icon-button.star-negative {
+    --paper-icon-button-width: 24px;
+    --paper-icon-button-height: 24px;
+    color: var(--paper-grey-500);
+    padding-left:0px;
+    padding-right: 16px;
+  }
+  paper-icon-button.location {
+    color: var(--paper-grey-500);
+  }
+  </style>
+
+  <div class="card">
+    <div class="card-content">
+      <div class="cafe-header">[[name]]
+        <div class="cafe-location cafe-light">
+          <paper-icon-button class="location" icon="location-pin"></paper-icon-button>
+          <span>[[address]]</span>
+        </div>
+      </div>
+      <div class="cafe-rating">
+        <paper-icon-button class$=[[stars.0]] icon="star" disabled></paper-icon-button>
+        <paper-icon-button class$=[[stars.1]] icon="star" disabled></paper-icon-button>
+        <paper-icon-button class$=[[stars.2]] icon="star" disabled></paper-icon-button>
+        <paper-icon-button class$=[[stars.3]] icon="star" disabled></paper-icon-button>
+        <paper-icon-button class$=[[stars.4]] icon="star" disabled></paper-icon-button>
+      </div>
+      <p>[[dollars]]・[[type]]</p>
+      <p class="cafe-light">[[description]]</p>
+    </div>
+  </div>
+
+</template>
+
+<script>
+
+class NewsPlace extends Polymer.Element {
+
+  static get is() { return 'place-card'; }
+
+  static get properties() { return {
+    name: String,
+    address: String,
+    dollars: String,
+    type: String,
+    description: String,
+    rating: Number,
+    stars: {
+      type: Array,
+      computed: '_computeStars(rating)',
+      notify: true
+    }
+  }}
+
+  _computeStars(rating) {
+    var array= Array;
+    for (var i=0; i<5; i++) {
+      if (i <= rating-1) {
+        array[i] = "star";
+      } else {
+        array[i] = "star-negative";
+      }
+    }
+    return array;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+}
+
+customElements.define(NewsPlace.is, NewsPlace);
+
+</script>
+
+</dom-module>
