@@ -16,56 +16,92 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="place-card">
 
   <template>
+  <style include="iron-flex iron-flex-alignment">
 
   <style is="custom-style">
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%
-  }
-  .card {
-  }
-  .cafe-header {
-    @apply(--paper-font-headline);
-    font-size: 24px;
-  }
-  .cafe-light {
-    color: var(--paper-grey-600);
-  }
-  .cafe-location {
-    float: right;
-    font-size: 15px;
-    vertical-align: middle;
-  }
-  paper-icon-button.star {
-    --paper-icon-button-width: 24px;
-    --paper-icon-button-height: 24px;
-    color: var(--paper-amber-500);
-    padding-left:0px;
-    padding-right: 16px;
-  }
-  paper-icon-button.star-negative {
-    --paper-icon-button-width: 24px;
-    --paper-icon-button-height: 24px;
-    color: var(--paper-grey-500);
-    padding-left:0px;
-    padding-right: 16px;
-  }
-  paper-icon-button.location {
-    color: var(--paper-grey-500);
-  }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    a {
+      text-decoration: none;
+    }
+    .card {
+      @apply --layout-flex;
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      margin-bottom: 32px;
+    }
+    .card-header {
+      @apply(--layout-flex);
+    }
+    .title {
+      @apply(--paper-font-headline);
+      font-size: 24px;
+    }
+    .location {
+      font-size: 15px;
+      vertical-align: middle;
+      color: var(--paper-grey-600);
+    }
+    .card-image-content {
+      @apply --layout-flex;
+      display: block;
+      text-align: center;
+    }
+    .card-image {
+      width: 300px;
+      height: 300px;
+      border-radius: 3px;
+      padding: 8px;
+    }
+    .card-text-content {
+      @apply --layout-flex-2;
+      padding: 8px;
+    }
+
+    paper-icon-button.star {
+      --paper-icon-button-width: 24px;
+      --paper-icon-button-height: 24px;
+      color: var(--paper-amber-500);
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    paper-icon-button.star-negative {
+      --paper-icon-button-width: 24px;
+      --paper-icon-button-height: 24px;
+      color: var(--paper-grey-500);
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    paper-icon-button.location {
+      --paper-icon-button-width: 24px;
+      --paper-icon-button-height: 24px;
+      padding: 0;
+      color: var(--paper-grey-500);
+    }
   </style>
 
   <div class="card">
-    <div class="card-content">
-      <div class="cafe-header">[[name]]
-        <div class="cafe-location cafe-light">
-          <paper-icon-button class="location" icon="location-pin"></paper-icon-button>
-          <span>[[address]]</span>
+    <div class="card-image-content">
+      <img class="card-image" src$=[[image]]></img>
+    </div>
+    <div class="card-text-content">
+      <div class="card-header">
+        <div class="title">
+          [[name]]
         </div>
       </div>
-      <div class="cafe-rating">
+      <div class="location">
+        <a href$=[[googleMapsURL]] target="_blank">
+          <paper-icon-button class="location" icon="location-pin" disabled></paper-icon-button>
+
+          <span>[[address]]</span>
+        </a>
+      </div>
+      <div class="rating">
         <paper-icon-button class$=[[stars.0]] icon="star" disabled></paper-icon-button>
         <paper-icon-button class$=[[stars.1]] icon="star" disabled></paper-icon-button>
         <paper-icon-button class$=[[stars.2]] icon="star" disabled></paper-icon-button>
@@ -73,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-icon-button class$=[[stars.4]] icon="star" disabled></paper-icon-button>
       </div>
       <p>[[dollars]]・[[type]]</p>
-      <p class="cafe-light">[[description]]</p>
+      <p>[[description]]</p>
     </div>
   </div>
 
@@ -91,11 +127,16 @@ class NewsPlace extends Polymer.Element {
     dollars: String,
     type: String,
     description: String,
+    image: String,
     rating: Number,
     stars: {
       type: Array,
       computed: '_computeStars(rating)',
       notify: true
+    },
+    googleMapsURL: {
+      type: String,
+      computed: '_computeGoogleMaps(address)'
     }
   }}
 
@@ -109,6 +150,9 @@ class NewsPlace extends Polymer.Element {
       }
     }
     return array;
+  }
+  _computeGoogleMaps(address) {
+    return 'https://www.google.ca/maps/search/' + address + '?hl=en&source=opensearch';
   }
 
   connectedCallback() {
