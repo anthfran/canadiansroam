@@ -115,7 +115,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host([page=list]) .sticky-nav paper-icon-button[icon=mail],
       :host([page=list]) .sticky-nav paper-icon-button[icon=share] {
         display: none;
+        width: 24px;
+        height: 24px;
       }
+
 
       .sticky-nav-menu {
         display: none;
@@ -273,8 +276,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <a name="[[category.name]]" href="/list/[[category.name]]">[[category.title]]</a>
               </template>
             </dom-repeat>
-            <a href="https://www.facebook.com/canadiansroam/" target="_blank"><paper-icon-button icon="facebook" class="facebook"></paper-icon-button ></a>
-            <a href="https://www.instagram.com/canadiansroam/" target="_blank"><paper-icon-button icon="instagram" class="instagram"></paper-icon-button ></a>
+            <facebook-link href="https://www.facebook.com/canadiansroam/" height="20px"></facebook-link>
+            <instagram-link href="https://www.instagram.com/canadiansroam/" height="20px"></instagram-link>
           </iron-selector>
         </template>
       </dom-if>
@@ -299,8 +302,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <content></content>
           </div>
         </div>
-        <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
-        <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
+        <facebook-link href="https://www.facebook.com/canadiansroam/" height="24px" color="white"></facebook-link>
+        <instagram-link href="https://www.instagram.com/canadiansroam/" height="24px" color="white"></instagram-link>
+        &nbsp;
+        <paper-icon-button icon="share" aria-label="Share on social networks" class="share-icon"></paper-icon-button>
       </app-toolbar>
       <div class="sticky-nav-menu" shown$="[[drawerOpened]]">
         <iron-selector class="grid-container" role="navigation"
