@@ -19,69 +19,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <style include="iron-flex iron-flex-alignment">
 
   <style is="custom-style">
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    a {
-      text-decoration: none;
-    }
-    .card {
-      @apply --layout-flex;
-      @apply(--layout-horizontal);
-      @apply(--layout-wrap);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-      margin-bottom: 32px;
-    }
-    .card-header {
-      @apply(--layout-flex);
-    }
-    .title {
-      @apply(--paper-font-headline);
-      font-size: 24px;
-    }
-    .location {
-      font-size: 15px;
-      vertical-align: middle;
-      color: var(--paper-grey-600);
-    }
-    .card-image-content {
-      @apply --layout-flex;
-      display: block;
-      text-align: center;
-    }
-    .card-image {
-      width: 300px;
-      height: 300px;
-      border-radius: 3px;
-      padding: 8px;
-    }
-    .card-text-content {
-      @apply --layout-flex-2;
-      padding: 8px;
-    }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  a {
+    text-decoration: none;
+  }
+  .card {
+    @apply --layout-flex;
+    @apply(--layout-horizontal);
+    @apply(--layout-wrap);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    margin-bottom: 32px;
+  }
+  .card-header {
+    @apply(--layout-flex);
+  }
+  .title {
+    @apply(--paper-font-headline);
+    font-size: 24px;
+  }
+  .location {
+    font-size: 15px;
+    vertical-align: middle;
+    color: var(--paper-grey-600);
+  }
+  .card-image-content {
+    @apply --layout-flex;
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .card-image {
+    width: 300px;
+    height: 300px;
+    border-radius: 3px;
+    padding: 8px;
+  }
+  .card-text-content {
+    @apply --layout-flex-2;
+    -webkit-flex: 1 1 500px;
+    padding: 8px;
+  }
 
-    paper-icon-button.star {
-      --paper-icon-button-width: 24px;
-      --paper-icon-button-height: 24px;
-      color: var(--paper-amber-500);
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    paper-icon-button.star-negative {
-      --paper-icon-button-width: 24px;
-      --paper-icon-button-height: 24px;
-      color: var(--paper-grey-500);
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-    paper-icon-button.location {
-      --paper-icon-button-width: 24px;
-      --paper-icon-button-height: 24px;
-      padding: 0;
-      color: var(--paper-grey-500);
-    }
+  paper-icon-button.star {
+    --paper-icon-button-width: 24px;
+    --paper-icon-button-height: 24px;
+    color: var(--paper-amber-500);
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  paper-icon-button.star-negative {
+    --paper-icon-button-width: 24px;
+    --paper-icon-button-height: 24px;
+    color: var(--paper-grey-500);
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  paper-icon-button.location {
+    --paper-icon-button-width: 24px;
+    --paper-icon-button-height: 24px;
+    padding: 0;
+    color: var(--paper-grey-500);
+  }
   </style>
 
   <div class="card">
@@ -91,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card-text-content">
       <div class="card-header">
         <div class="title">
-          [[name]]
+          <a href$=[[url]]>[[name]]</a>
         </div>
       </div>
       <div class="location">
@@ -123,6 +125,7 @@ class NewsPlace extends Polymer.Element {
 
   static get properties() { return {
     name: String,
+    url: String,
     address: String,
     dollars: String,
     type: String,
