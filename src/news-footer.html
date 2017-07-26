@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/social-links/facebook-link.html">
+<link rel="import" href="../bower_components/social-links/instagram-link.html">
 
 <dom-module id="news-footer">
 
@@ -26,33 +28,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       text-align: center;
       background-color: #CE2B37;
       height: 73px;
-    }
-
-    footer a {
-      font-size: 16px;
-      color: #FFF;
-      text-decoration: none;
-      text-align: center;
-    }
-
-    footer a:hover {
-      text-decoration: none;
-    }
-
-    paper-icon-button {
-      margin-top: 16px;
-    }
-    .visit {
-      color: #fff;
-      height: 32px;
-      margin-top:10px;
+      padding-top: 32px;
     }
 
     </style>
 
     <footer>
-      <a href="https://www.facebook.com/canadiansroam/" target="_blank"><paper-icon-button icon="facebook"></paper-icon-button ></a>
-      <a href="https://www.instagram.com/canadiansroam/" target="_blank"><paper-icon-button icon="instagram"></paper-icon-button ></a>
+      <facebook-link href="https://www.facebook.com/canadiansroam/" height="32px" color="white"></facebook-link>
+      <instagram-link href="https://www.instagram.com/canadiansroam/" height="32px" color="white"></instagram-link>
     </footer>
 
   </template>
