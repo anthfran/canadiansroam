@@ -38,10 +38,17 @@ const data = {
   "permissio-de-soggiorno": {
     "type":"article",
     "title":"Appling for a Permissio de Soggiorno",
-    "description":"test",
-    "image":"",
-    "author":""
-    }
+    "description":"Once in Italy, here is some guidance for applying for a Permissio de Soggiorno",
+    "image":"permissio-de-soggiorno.jpg",
+    "author":"Anthony Francella"
+  },
+  "best-pizza": {
+    "type":"article",
+    "title":"Best Pizza in Rome",
+    "description":"We want to try all the best Pizza that Rome has to offer! Here's our favourites.",
+    "image":"pizza.jpg",
+    "author":"Anthony Francella"
+  }
 };
 
 exports.meta = functions.https.onRequest((req, res) => {
