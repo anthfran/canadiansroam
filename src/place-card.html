@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply --layout-flex;
     @apply(--layout-horizontal);
     @apply(--layout-wrap);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     margin-bottom: 32px;
   }
   .card-header {
@@ -103,13 +103,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span>[[address]]</span>
         </a>
       </div>
-      <div class="rating">
-        <paper-icon-button class$=[[stars.0]] icon="star" disabled></paper-icon-button>
-        <paper-icon-button class$=[[stars.1]] icon="star" disabled></paper-icon-button>
-        <paper-icon-button class$=[[stars.2]] icon="star" disabled></paper-icon-button>
-        <paper-icon-button class$=[[stars.3]] icon="star" disabled></paper-icon-button>
-        <paper-icon-button class$=[[stars.4]] icon="star" disabled></paper-icon-button>
-      </div>
+      <template is="dom-if" if="{{rating}}">
+        <div class="rating">
+          <paper-icon-button class$=[[stars.0]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[stars.1]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[stars.2]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[stars.3]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[stars.4]] icon="star" disabled></paper-icon-button>
+        </div>
+      </template>
       <p>[[dollars]]・[[type]]</p>
       <p>[[description]]</p>
     </div>
