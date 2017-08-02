@@ -81,21 +81,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <firebase-app
-      auth-domain="canadiansroam.com"
-      database-url="https://canadiansroam.firebaseio.com/"
-      api-key="AIzaSyC2p0DuS-ChW3BXA3O4N8YbUgkBkhu5JDE"></firebase-app>
-    <firebase-query
-      id="query"
-      app-name="canadiansroam"
-      path="/"
-      data="{{firebaseData}}">
-    </firebase-query>
-
-    <template is="dom-repeat" items="{{firebaseData}}" as="note">
-      [[note.title]]
-    </template>
-
     <!--
       news-data provides the list of categories and the articles for the category.
     -->
