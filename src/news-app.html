@@ -13,6 +13,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+
 
 <link rel="import" href="news-data.html">
 <link rel="import" href="news-nav.html">
@@ -77,6 +80,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+
+    <firebase-app
+      auth-domain="canadiansroam.com"
+      database-url="https://canadiansroam.firebaseio.com/"
+      api-key="AIzaSyC2p0DuS-ChW3BXA3O4N8YbUgkBkhu5JDE"></firebase-app>
+    <firebase-query
+      id="query"
+      app-name="canadiansroam"
+      path="/"
+      data="{{firebaseData}}">
+    </firebase-query>
+
+    <template is="dom-repeat" items="{{firebaseData}}" as="note">
+      [[note.title]]
+    </template>
 
     <!--
       news-data provides the list of categories and the articles for the category.
@@ -157,6 +175,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           articleId: String,
 
           article: Object,
+
+          firebaseData: Object,
 
           articleHeadline: {
             type: String,
