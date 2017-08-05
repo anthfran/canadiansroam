@@ -136,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="container" fade-in$="[[!loading]]" hidden$="[[failure]]">
       <div class="content">
-        <news-list-featured-item item="[[_getFeaturedItem(category.items)]]">
+        <news-list-featured-item item="[[featuredItem]]">
         </news-list-featured-item>
 
         <ul class="app-grid article-grid fade-in">
@@ -172,7 +172,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         route: Object,
 
-        category: Object,
+        category: {
+          type: Object,
+          observer: '_parseCategory',
+          notify: true
+        },
+        featuredItem: {
+          type: Object,
+          notify: true
+        },
 
         offline: Boolean,
 
@@ -201,7 +209,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.removeEventListener('resize', this._boundResizeHandler);
       }
 
+      _parseCategory(category) {
+        console.log(category);
+        this.featuredItem = this._getFeaturedItem(category.items)
+        console.log(this.featuredItem);
+      }
+
       _getFeaturedItem(items) {
+        console.log(items[0]);
         return items ? items[0] : {};
       }
 
@@ -215,9 +230,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _slice(list, begin, end) {
-        console.log(list);
-        console.log(begin);
-        console.log(end);
+        // console.log(list);
+        // console.log(begin);
+        // console.log(end);
 
         if (list) {
           return list.slice(begin, end);

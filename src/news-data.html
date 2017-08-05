@@ -16,11 +16,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-document
     id="document"
     path="/articles"
-    data="{{articles}}">
-  </firebase-document>
+    data="{{firebaseData}}">
+    </firebase-document>
+    <app-indexeddb-mirror
+      key="articles"
+      data="{{firebaseData}}"
+      persisted-data="{{articles}}">
+    </app-indexeddb-mirror>
+
 </template>
 
 <script>
+  let textarea = document.createElement('textarea');
 
   class NewsData extends Polymer.Element {
 
@@ -54,13 +61,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       category: {
         type: Object,
-        computed: '_computeCategory(categoryName)',
+        value: {},
         notify: true
       },
 
       articles: {
         type: Object,
-        observer: 'dataChanged'
+        observer: '_parseArticles',
+        notify: true
+      },
+
+      firebaseData: {
+        type: Object,
+        observer: '_dataChanged',
+        notify: true
       },
 
       article: {
@@ -78,14 +92,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }}
 
     static get observers() { return [
-      '_fetchArticle(article, offline)'
+      '_fetchArticle(article, offline)',
+      '_tempPrintCategoryUpdate(category.items)'
     ]}
 
-    dataChanged(newData, oldData) {
+    _dataChanged(newData, oldData) {
+      this.articles = newData;
+    }
+    _tempPrintCategoryUpdate(newData) {
+      console.log("category updated");
       console.log(newData);
-      console.log(oldData);
-      //this.categories[0].items = newData;
-      //this._computeCategory("latest");
     }
 
     _computeArticle(categoryItems, articleId) {
@@ -115,15 +131,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     }
 
-    _computeCategory(categoryName) {
-      for (let i = 0, c; c = this.categories[i]; ++i) {
-
-        if (c.name === categoryName) {
-          console.log(c);
-          return c;
-        }
-      }
-      return null;
+    _parseArticles(articles) {
+      console.log(this.catgory);
+      this.category.items = this._parseCategoryItems(articles, this.categoryName);
+      console.log(this.category);
     }
 
     _parseCategoryItems(articles, categorySelection) {
@@ -147,6 +158,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       return items;
     }
+
+    _unescapeText(text) {
+        textarea.innerHTML = text;
+        return textarea.textContent;
+      }
 
     _getItemHref(item) {
       return item.id ? '/article/' + this.categoryName + '/' + encodeURIComponent(item.id) : null;
