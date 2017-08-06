@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <dom-module id="news-data">
   <template>
@@ -19,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     data="{{firebaseData}}">
     </firebase-document>
     <app-indexeddb-mirror
-      key="articles"
+      key="firebaseData"
       data="{{firebaseData}}"
       persisted-data="{{articles}}">
     </app-indexeddb-mirror>
@@ -47,7 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         notify: true
       },
 
-      categoryName: String,
+      categoryName: {
+        type: String,
+        observer: '_categoryChanged'
+      },
 
       articleId: String,
 
@@ -55,7 +59,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       loading: {
         type: Boolean,
-        readOnly: true,
         notify: true
       },
 
@@ -73,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       firebaseData: {
         type: Object,
-        observer: '_dataChanged',
+        observer: '_newFirebaseData',
         notify: true
       },
 
@@ -85,23 +88,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       failure: {
         type: Boolean,
-        readOnly: true,
         notify: true
       }
 
     }}
 
     static get observers() { return [
-      '_fetchArticle(article, offline)',
-      '_tempPrintCategoryUpdate(category.items)'
+      '_fetchArticle(article, offline)'
     ]}
 
-    _dataChanged(newData, oldData) {
-      this.articles = newData;
-    }
-    _tempPrintCategoryUpdate(newData) {
-      console.log("category updated");
-      console.log(newData);
+    _newFirebaseData(newData) {
+      console.log("receiving data from firebase...");
+      // console.log(newData);
+      // this.set('articles', newData);
+      // this.set('loading', true);
+      // this.set('failure', false);
     }
 
     _computeArticle(categoryItems, articleId) {
@@ -118,11 +119,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     _fetchArticle(article, offline) {
-
+      console.log('fetching article');
       // Don't fail if we become offline but already have a cached version, or if there's
       // nothing to fetch, or if already loading.
       if ((offline && article && article.html) || !article || this.loading) {
-        this._setFailure(false);
+        this.set('failure', false);
         return;
       }
       this._fetch('/data/articles/' + article.id + '.html',
@@ -131,10 +132,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     }
 
+    _categoryChanged(categoryName) {
+      this.set('category.items', this._parseCategoryItems(this.articles, categoryName));
+    }
+
     _parseArticles(articles) {
-      console.log(this.catgory);
-      this.category.items = this._parseCategoryItems(articles, this.categoryName);
-      console.log(this.category);
+      this.set('category.items', this._parseCategoryItems(articles, this.categoryName));
     }
 
     _parseCategoryItems(articles, categorySelection) {
@@ -226,6 +229,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       return template.content.querySelector('.content').innerHTML;
     }
+
+    _fetch(url, callback, attempts, isRaw) {
+        let xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', (e) => {
+          this.set('loading', false);
+          if (isRaw) {
+            callback(e.target.responseText);
+          } else {
+            callback(JSON.parse(e.target.responseText));
+          }
+        });
+        xhr.addEventListener('error', (e) => {
+          // Flaky connections might fail fetching resources
+          if (attempts > 1) {
+            this._fetchDebouncer = Polymer.Debouncer.debounce(this._fetchDebouncer,
+              Polymer.Async.timeOut.after(200), this._fetch.bind(this, url, callback, attempts - 1));
+            } else {
+              this.set('loading', false);
+              this.set('failure', true);
+            }
+          });
+          this.set('loading', true);
+          this.set('failure', false);
+          xhr.open('GET', url);
+          xhr.send();
+        }
 
   }
 
