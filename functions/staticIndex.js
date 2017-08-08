@@ -1,4 +1,4 @@
-export staticIndex = `<!doctype html>
+const staticIndex = `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -88,3 +88,5 @@ export staticIndex = `<!doctype html>
 
 </body>
 </html>`;
+
+exports.staticIndex = staticIndex;
