@@ -98,11 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ]}
 
     _newFirebaseData(newData) {
-      console.log("receiving data from firebase...");
-      // console.log(newData);
-      // this.set('articles', newData);
-      // this.set('loading', true);
-      // this.set('failure', false);
+      this.firebaseData = newData;
     }
 
     _computeArticle(categoryItems, articleId) {
