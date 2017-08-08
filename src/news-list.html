@@ -139,8 +139,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <news-list-featured-item item="[[featuredItem]]">
         </news-list-featured-item>
 
-        <ul class="app-grid article-grid fade-in">
-          <dom-repeat items="[[_slice(category.items, 1, 5)]]">
+        <ul class="app-grid article-grid">
+          <dom-repeat items="[[otherItems]]" as="item">
             <template>
               <li>
                 <news-list-item item="[[item]]"></news-list-item>
@@ -174,15 +174,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         category: {
           type: Object,
-          observer: '_parseCategory',
           notify: true
         },
+
         featuredItem: {
           type: Object,
           notify: true
         },
 
-        offline: Boolean,
+        otherItems: {
+          type: Object,
+          notify: true
+        },
+
+        offline: {
+          type: Boolean
+        },
 
         failure: Boolean,
 
@@ -198,6 +205,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       }}
 
+      static get observers() { return [
+        '_categoryUpdated(category.items)'
+      ]}
+
+      _categoryUpdated() {
+        console.log('category updated');
+        this.set('featuredItem', this.category.items[0]);
+        this.set('otherItems', this._slice(this.category.items, 1, 5));
+      }
+
       connectedCallback() {
         super.connectedCallback();
         this._boundResizeHandler = this._resizeHandler.bind(this);
@@ -209,14 +226,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.removeEventListener('resize', this._boundResizeHandler);
       }
 
-      _parseCategory(category) {
-        console.log(category);
-        this.featuredItem = this._getFeaturedItem(category.items)
-        console.log(this.featuredItem);
-      }
-
       _getFeaturedItem(items) {
-        console.log(items[0]);
         return items ? items[0] : {};
       }
 
@@ -230,10 +240,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _slice(list, begin, end) {
-        // console.log(list);
-        // console.log(begin);
-        // console.log(end);
-
         if (list) {
           return list.slice(begin, end);
         }
