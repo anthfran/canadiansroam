@@ -129,6 +129,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     _categoryChanged(categoryName) {
+      for (let i = 0; i < this.categories.length -1; ++i) {
+          if (this.categories[i].name === categoryName) {
+            console.log(this.categories[i].title);
+            this.set('category.title', this.categories[i].title)
+          }
+        }
       this.set('category.items', this._parseCategoryItems(this.articles, categoryName));
     }
 
