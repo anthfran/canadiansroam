@@ -1,5 +1,13 @@
 const staticIndex = require('./staticIndex');
-const functions = require('firebase-functions');
+const firebase = require('firebase-functions');
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./canadiansroam-firebase-adminsdk-v9545-513360c730.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://canadiansroam.firebaseio.com"
+});
 
 var metaData = {
   "latest": {
@@ -32,26 +40,37 @@ var metaData = {
   }
 };
 
-exports.buildMetaData = functions.database.ref('/articles')
-.onWrite(event => {
-  // Grab the current value of what was written to the Realtime Database.
-  const articles = event.data.val();
-  console.log('Change to articles detected: Building meta data');
+function updateMetaData(articles) {
   for (var i=0; i < articles.length-1; i++) {
     if (!metaData[articles[i].id]) {
       metaData[articles[i].id] = {};
       metaData[articles[i].id].type = 'article';
     }
     metaData[articles[i].id].title = articles[i].title;
-    metaData[articles[i].id].description = articles[i].description;
+    metaData[articles[i].id].description = articles[i].summary;
     metaData[articles[i].id].image = articles[i].imgSrc;
     metaData[articles[i].id].author = articles[i].author;
   }
-  console.log(metaData);
+}
+
+// Init metaData in memory on load
+var db = admin.database();
+var ref = db.ref("/articles");
+ref.once("value", function(articles) {
+  updateMetaData(articles.val());
+});
+
+// when firebase database is updated, update metaData in memory
+exports.databaseUpdate = firebase.database.ref('/articles')
+.onUpdate(event => {
+  // Grab the current value of what was written to the Realtime Database.
+  const data = event.data.val();
+  updateMetaData(data);
   return;
 });
 
-exports.meta = functions.https.onRequest((req, res) => {
+exports.meta = firebase.https.onRequest((req, res) => {
+  console.log(metaData);
   const agent = req.headers['user-agent'];
   console.log(agent);
   if (agent.match(/^(Googlebot|bingbot|msnbot|facebookexternalhit|Facebot|Twitterbot|Google-Structured-Data-Testing-Tool|WhatsApp)/g) != null) {
@@ -69,32 +88,32 @@ exports.meta = functions.https.onRequest((req, res) => {
       <!doctype html>
       <html lang="en">
         <head>
-          <meta property="og:type" content="${data[page]['type']}" />
-          <meta property="og:title" content="${data[page]['title']}" />
-          <meta property="og:description" content="${data[page]['description']}" />
-          <meta property="og:image" content="https://canadiansroam.com/data/${data[page]['image']}" />
+          <meta property="og:type" content="${metaData[page]['type']}" />
+          <meta property="og:title" content="${metaData[page]['title']}" />
+          <meta property="og:description" content="${metaData[page]['description']}" />
+          <meta property="og:image" content="https://canadiansroam.com/data/${metaData[page]['image']}" />
           <meta property="og:site_name" content="Canadins Roam" />
           <meta property="og:url" content="https://canadiansroam.com${req.url}" />
           <meta property="fb:app_id" content="1547851938590583" />
 
           <meta name="twitter:card" content="summary">
             <meta name="twitter:url" content="https://canadiansroam.com${req.url}">
-              <meta name="twitter:title" content="${data[page]['title']}">
-                <meta name="twitter:description" content="${data[page]['description']}">
-                  <meta name="twitter:image:src" content="https://canadiansroam.com/data/images/${data[page]['image']}">
+              <meta name="twitter:title" content="${metaData[page]['title']}">
+                <meta name="twitter:description" content="${metaData[page]['description']}">
+                  <meta name="twitter:image:src" content="https://canadiansroam.com/data/images/${metaData[page]['image']}">
 
                     <script type="application/ld+json">
                       {
                         "@context": "http://schema.org",
                         "@type": "NewsArticle",
                         "mainEntityOfPage": "https://canadiansroam.com${req.url}",
-                        "headline": "${data[page]['title']}",
+                        "headline": "${metaData[page]['title']}",
                         "datePublished": "2017-06-02T14:00:00+00:00",
                         "dateModified": "2017-06-02T06:21:30.434480+00:00",
-                        "description": "${data[page]['description']}",
+                        "description": "${metaData[page]['description']}",
                         "author": {
                           "@type": "Person",
-                          "name": "${data[page]['author']}"
+                          "name": "${metaData[page]['author']}"
                         },
                         "publisher": {
                           "@type": "Organization",
@@ -108,7 +127,7 @@ exports.meta = functions.https.onRequest((req, res) => {
                         },
                         "image": {
                           "@type": "ImageObject",
-                          "url": "https://canadiansroam.com/data/images/${data[page]['image']}",
+                          "url": "https://canadiansroam.com/data/images/${metaData[page]['image']}",
                           "width": "500",
                           "height": "332"
                         }
