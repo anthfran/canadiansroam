@@ -1,57 +1,8 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!doctype html>
+const staticIndex = `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Canadians Roam" />
-  <meta property="og:description" content="Home page of two Canadians Roaming through Europe while living in Rome." />
-  <meta property="og:image" content="https://canadiansroam.com/data/images/life-in-rome-intro.jpg" />
-  <meta property="og:site_name" content="Canadins Roam" />
-  <meta property="og:url" content="https://canadiansroam.com/" />
-  <meta property="fb:app_id" content="1547851938590583" />
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:url" content="https://canadiansroam.com/">
-  <meta name="twitter:title" content="Canadians Roam">
-  <meta name="twitter:description" content="Home page of two Canadians Roaming through Europe while living in Rome.">
-  <meta name="twitter:image:src" content="https://canadiansroam.com/data/images/life-in-rome-intro.jpg">
-
-  <script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Website",
-    "mainEntityOfPage": "https://canadiansroam.com/",
-    "headline": "Canadians Roam",
-    "description": "Home page of two Canadians Roaming through Europe while living in Rome.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Canadians Roam",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://canadiansroam.com/images/canadiansroam-icon-192.png",
-        "width": "192",
-        "height": "192"
-      }
-    },
-    "image": {
-      "@type": "ImageObject",
-      "url": "https://canadiansroam.com/data/images/life-in-rome-intro.jpg",
-      "width": "500",
-      "height": "332"
-    }
-  }
-  </script>
   <title>Canadians Roam</title>
 
   <link rel="shortcut icon" sizes="32x32" href="/images/canadiansroam-icon-32.png">
@@ -74,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="msapplication-TileImage" content="/images/canadiansroam-icon-144.png">
   <meta name="msapplication-TileColor" content="#CE2B37">
   <meta name="msapplication-tap-highlight" content="no">
+
 
   <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="/src/news-app.html">
@@ -112,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       body {
         background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.25) 15%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 48%, rgba(0,0,0,1) 60%);
         background-repeat: no-repeat;
-        background-size: 100% 70vh;
+        background-size: 100% 100vh;
       }
 
       body.fixed-viewport-height {
@@ -135,4 +87,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <news-app unresolved app-title="Canadians Roam">Canadians Roam</news-app>
 
 </body>
-</html>
+</html>`;
+
+exports.staticIndex = staticIndex;

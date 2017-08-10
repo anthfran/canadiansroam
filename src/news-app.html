@@ -13,9 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
-
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 
 <link rel="import" href="news-data.html">
 <link rel="import" href="news-nav.html">
@@ -70,6 +68,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <news-analytics key="UA-39649263-1"></news-analytics>
+    <firebase-app
+      api-key="AIzaSyC2p0DuS-ChW3BXA3O4N8YbUgkBkhu5JDE"
+      auth-domain="canadiansroam.firebaseapp.com"
+      database-url="https://canadiansroam.firebaseio.com"
+      storage-bucket="canadiansroam.appspot.com"
+      messaging-sender-id="186519135664"></firebase-app>
 
     <!--
       app-location and app-route elements provide the state of the URL for the app.
@@ -155,13 +159,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           categoryName: String,
 
-          category: Object,
+          category: {
+            type: Object,
+            notify: true
+          },
 
           articleId: String,
 
           article: Object,
 
-          firebaseData: Object,
+          firebaseData: {
+            type: Object,
+            notify: true
+          },
 
           articleHeadline: {
             type: String,
@@ -298,6 +308,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Elements in the app can notify section changes.
         // Response by a11y announcing the section and syncronizing the category.
         _updateDocumentTitle(page, categoryTitle, articleHeadline, appTitle) {
+          console.log(page);
+          console.log(categoryTitle);
+          console.log(articleHeadline);
           document.title = (page === 'list' ? categoryTitle : articleHeadline) + ' - ' + appTitle;
         }
 

@@ -12,3 +12,5 @@ functions/node_modules/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+canadiansroam-firebase-adminsdk-v9545-513360c730.json

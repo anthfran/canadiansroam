@@ -136,11 +136,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="container" fade-in$="[[!loading]]" hidden$="[[failure]]">
       <div class="content">
-        <news-list-featured-item item="[[_getFeaturedItem(category.items)]]">
+        <news-list-featured-item item="[[featuredItem]]">
         </news-list-featured-item>
 
-        <ul class="app-grid article-grid fade-in">
-          <dom-repeat items="[[_slice(category.items, 1, 5)]]">
+        <ul class="app-grid article-grid">
+          <dom-repeat items="[[otherItems]]" as="item">
             <template>
               <li>
                 <news-list-item item="[[item]]"></news-list-item>
@@ -172,9 +172,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         route: Object,
 
-        category: Object,
+        category: {
+          type: Object,
+          notify: true
+        },
 
-        offline: Boolean,
+        featuredItem: {
+          type: Object,
+          notify: true
+        },
+
+        otherItems: {
+          type: Object,
+          notify: true
+        },
+
+        offline: {
+          type: Boolean
+        },
 
         failure: Boolean,
 
@@ -189,6 +204,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         loading: Boolean
 
       }}
+
+      static get observers() { return [
+        '_categoryUpdated(category.items)'
+      ]}
+
+      _categoryUpdated() {
+        console.log('category updated');
+        this.set('featuredItem', this.category.items[0]);
+        this.set('otherItems', this._slice(this.category.items, 1, 5));
+      }
 
       connectedCallback() {
         super.connectedCallback();
