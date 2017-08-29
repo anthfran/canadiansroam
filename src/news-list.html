@@ -210,7 +210,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ]}
 
       _categoryUpdated() {
-        console.log('category updated');
         this.set('featuredItem', this.category.items[0]);
         this.set('otherItems', this._slice(this.category.items, 1, 5));
       }
