@@ -308,9 +308,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Elements in the app can notify section changes.
         // Response by a11y announcing the section and syncronizing the category.
         _updateDocumentTitle(page, categoryTitle, articleHeadline, appTitle) {
-          console.log(page);
-          console.log(categoryTitle);
-          console.log(articleHeadline);
           document.title = (page === 'list' ? categoryTitle : articleHeadline) + ' - ' + appTitle;
         }
 
