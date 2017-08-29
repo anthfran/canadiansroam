@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <firebase-document
     id="document"
-    path="/articles"
+    path="/articlesDev"
     data="{{firebaseData}}">
     </firebase-document>
     <app-indexeddb-mirror
@@ -115,7 +115,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     _fetchArticle(article, offline) {
-      console.log('fetching article');
       // Don't fail if we become offline but already have a cached version, or if there's
       // nothing to fetch, or if already loading.
       if ((offline && article && article.html) || !article || this.loading) {
@@ -131,7 +130,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     _categoryChanged(categoryName) {
       for (let i = 0; i < this.categories.length -1; ++i) {
           if (this.categories[i].name === categoryName) {
-            console.log(this.categories[i].title);
             this.set('category.title', this.categories[i].title)
           }
         }
