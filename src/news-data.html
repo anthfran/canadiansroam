@@ -137,6 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     _parseArticles(articles) {
+      this._categoryChanged(this.categoryName);
       this.set('category.items', this._parseCategoryItems(articles, this.categoryName));
     }
 
