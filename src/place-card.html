@@ -105,11 +105,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <template is="dom-if" if="{{rating}}">
         <div class="rating">
-          <paper-icon-button class$=[[stars.0]] icon="star" disabled></paper-icon-button>
-          <paper-icon-button class$=[[stars.1]] icon="star" disabled></paper-icon-button>
-          <paper-icon-button class$=[[stars.2]] icon="star" disabled></paper-icon-button>
-          <paper-icon-button class$=[[stars.3]] icon="star" disabled></paper-icon-button>
-          <paper-icon-button class$=[[stars.4]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[star1]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[star2]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[star3]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[star4]] icon="star" disabled></paper-icon-button>
+          <paper-icon-button class$=[[star5]] icon="star" disabled></paper-icon-button>
         </div>
       </template>
       <p>[[dollars]]・[[type]]</p>
@@ -134,10 +134,25 @@ class NewsPlace extends Polymer.Element {
     description: String,
     image: String,
     rating: Number,
-    stars: {
-      type: Array,
-      computed: '_computeStars(rating)',
-      notify: true
+    star1: {
+      type: String,
+      computed: '_computeStars(rating, 1)'
+    },
+    star2: {
+      type: String,
+      computed: '_computeStars(rating, 2)'
+    },
+    star3: {
+      type: String,
+      computed: '_computeStars(rating, 3)'
+    },
+    star4: {
+      type: String,
+      computed: '_computeStars(rating, 4)'
+    },
+    star5: {
+      type: String,
+      computed: '_computeStars(rating, 5)'
     },
     googleMapsURL: {
       type: String,
@@ -145,16 +160,12 @@ class NewsPlace extends Polymer.Element {
     }
   }}
 
-  _computeStars(rating) {
-    var array= Array;
-    for (var i=0; i<5; i++) {
-      if (i <= rating-1) {
-        array[i] = "star";
-      } else {
-        array[i] = "star-negative";
-      }
+  _computeStars(rating, star) {
+    if (rating < star) {
+      return 'star-negative';
+    } else {
+      return 'star';
     }
-    return array;
   }
   _computeGoogleMaps(address) {
     return 'https://www.google.ca/maps/search/' + address + '?hl=en&source=opensearch';
