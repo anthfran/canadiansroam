@@ -65,6 +65,8 @@ exports.databaseUpdate = firebase.database.ref('/articles')
   // Grab the current value of what was written to the Realtime Database.
   const data = event.data.val();
   updateMetaData(data);
+  console.log('updated metaData in memory');
+  console.log(metaData);
   return;
 });
 
@@ -72,7 +74,8 @@ exports.meta = firebase.https.onRequest((req, res) => {
   console.log(metaData);
   const agent = req.headers['user-agent'];
   console.log(agent);
-  if (agent.match(/^(Googlebot|bingbot|msnbot|facebookexternalhit|Facebot|Twitterbot|Google-Structured-Data-Testing-Tool|WhatsApp)/g) != null) {
+  if (agent.match(/(Googlebot|bingbot|msnbot|facebookexternalhit|Facebot|Twitterbot|Google-Structured-Data-Testing-Tool|WhatsApp)/g) != null) {
+    console.log('Matched, enriching meta tags!')
     var page;
     if (req.url.indexOf('/article/') >=0 ) {
       page = req.url.substr(9);
@@ -127,9 +130,7 @@ exports.meta = firebase.https.onRequest((req, res) => {
             },
             "image": {
               "@type": "ImageObject",
-              "url": "https://canadiansroam.com/data/images/${metaData[page]['image']}",
-              "width": "500",
-              "height": "332"
+              "url": "https://canadiansroam.com/data/images/${metaData[page]['image']}"
             }
           }
           </script>
@@ -161,10 +162,10 @@ exports.meta = firebase.https.onRequest((req, res) => {
           <link rel="import" href="/src/news-app.html">
           <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
           <script>
-          (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-9280083858789197",
-            enable_page_level_ads: true
-          });
+            (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-9280083858789197",
+              enable_page_level_ads: true
+            });
           </script>
           <style>
 
@@ -218,12 +219,14 @@ exports.meta = firebase.https.onRequest((req, res) => {
       </html>`);
   } else {
     // default index
+    console.log('Not matched, sending default index!')
     res.status(200).send(`<!doctype html>
       <html lang="en">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
         <title>Canadians Roam</title>
+        <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
         <link rel="shortcut icon" sizes="32x32" href="/images/canadiansroam-icon-32.png">
         <meta name="theme-color" content="#009246">
@@ -246,16 +249,14 @@ exports.meta = firebase.https.onRequest((req, res) => {
         <meta name="msapplication-TileColor" content="#CE2B37">
         <meta name="msapplication-tap-highlight" content="no">
 
-
-        <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
         <link rel="import" href="/src/news-app.html">
-        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-9280083858789197",
-            enable_page_level_ads: true
-          });
-        </script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+          <script>
+            (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-9280083858789197",
+              enable_page_level_ads: true
+            });
+          </script>
         <style>
 
           body {
